@@ -2,8 +2,6 @@ import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
-import AnimatedLogo from "../AnimatedLogo"; // optional
-
 const MotionBox = motion(Box);
 const MotionTypography = motion(Typography);
 
@@ -66,7 +64,7 @@ const HeroSection = () => {
           component="img"
           src="/images/white_logo.svg"
           alt="Logo"
-          sx={{ height: { xs: 80, sm: 100 } }}
+          sx={{ height: { xs: "20vw", sm: "5vw" } }}
         />
       </MotionBox>
 
@@ -102,7 +100,7 @@ const HeroSection = () => {
         <MotionTypography
           variants={titleVariants}
           variant="h1"
-          fontSize={{ xs: "1.5rem", sm: "3rem" }}
+          fontSize={{ xs: "7vw", sm: "2.4vw" }}
         >
           Safa Social Circle
         </MotionTypography>
@@ -111,7 +109,7 @@ const HeroSection = () => {
           variants={bodyVariants}
           variant="body1"
           mt={4}
-          fontSize={{ xs: "1rem", sm: "1.6rem" }}
+          fontSize={{ xs: "3.6vw", sm: "1.4vw" }}
           fontWeight={500}
           sx={{ textAlign: "justify", textAlignLast: "center" }}
         >
