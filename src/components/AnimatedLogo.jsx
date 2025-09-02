@@ -1,21 +1,20 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useId } from "react";
 import { motion } from "framer-motion";
 
 /**
  * AnimatedLogo
- * Random per-section *fill* animation (no strokes) + optional radial mode.
- *
- * Modes:
- *  - "radial": fill expands from the center outward using a circular mask
- *  - "random": each path is *filled* via a directional wipe (mask) in a random
- *               direction and stagger (not just fading opacity)
+ * Fill-only animations (no strokes) with three modes:
+ *  - "radial": one-time center-out reveal
+ *  - "random": per-path directional wipes (one-time)
+ *  - "loader": looping radial pulse for loading states
  *
  * Props
- *  - color: fill color of the logo (default: "#fff")
- *  - size: width of the SVG in px (height auto via viewBox) (default: 220)
+ *  - color: fill color (default: "#fff")
+ *  - size: width in px (default: 220)
  *  - speed: base duration in seconds (default: 1.4)
- *  - mode: "radial" | "random" (default: "radial")
- *  - seed: number to stabilize random ordering/timings when mode="random"
+ *  - mode: "radial" | "random" | "loader" (default: "radial")
+ *  - seed: number to stabilize random ordering/timings (for "random")
+ *  - loop: boolean to loop random wipes (default: false)
  */
 const AnimatedLogo = ({
   color = "#fff",
@@ -23,7 +22,9 @@ const AnimatedLogo = ({
   speed = 1.4,
   mode = "radial",
   seed,
+  loop = false,
 }) => {
+  const uid = useId(); // unique id prefix to avoid mask collisions
   const vw = 165.52;
   const vh = 159.21;
   const cx = vw / 2;
@@ -49,13 +50,18 @@ const AnimatedLogo = ({
     // Create randomized direction + timing per path
     return pathD
       .map((_, i) => ({
-        angle: rng() * 360 - 180, // -180..180 degrees
+        angle: rng() * 360 - 180, // -180..180
         delay: (i + rng()) * (speed * 0.25),
-        dur: speed * (0.6 + rng() * 0.6), // 0.6x..1.2x of base speed
+        dur: speed * (0.6 + rng() * 0.6), // 0.6x..1.2x base
         orderKey: rng(),
       }))
-      .sort((a, b) => a.orderKey - b.orderKey); // shuffle reveal order
+      .sort((a, b) => a.orderKey - b.orderKey); // shuffled order
   }, [mode, seed, speed]);
+
+  // Mask IDs (unique per instance)
+  const RADIAL_ID = `${uid}-radial-fill-mask`;
+  const LOADER_ID = `${uid}-loader-mask`;
+  const RAND_ID = (i) => `${uid}-rand-mask-${i}`;
 
   return (
     <motion.svg
@@ -63,12 +69,13 @@ const AnimatedLogo = ({
       viewBox={`0 0 ${vw} ${vh}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Safa logo with fill animation"
+      aria-label="Safa logo animation"
       style={{ display: "block" }}
     >
       <defs>
+        {/* One-time center-out reveal */}
         {mode === "radial" && (
-          <mask id="radial-fill-mask">
+          <mask id={RADIAL_ID}>
             <rect x="0" y="0" width={vw} height={vh} fill="black" />
             <motion.circle
               cx={cx}
@@ -81,45 +88,69 @@ const AnimatedLogo = ({
           </mask>
         )}
 
+        {/* Looping loader: pulsing center-out fill */}
+        {mode === "loader" && (
+          <mask id={LOADER_ID}>
+            <rect x="0" y="0" width={vw} height={vh} fill="black" />
+            <motion.circle
+              cx={cx}
+              cy={cy}
+              fill="white"
+              initial={{ r: 0 }}
+              animate={{ r: [0, maxR, 0] }}
+              transition={{
+                duration: speed * 2, // full out-and-back cycle
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </mask>
+        )}
+
+        {/* Random directional wipes (optionally looped) */}
         {mode === "random" &&
           randomSpec.map((spec, i) => (
-            <mask id={`rand-mask-${i}`} key={`mask-${i}`}>
-              {/* hidden background */}
+            <mask id={RAND_ID(i)} key={i}>
               <rect x="0" y="0" width={vw} height={vh} fill="black" />
-              {/* directional wipe: a full-viewport rect that scales from center */}
               <motion.rect
                 x={0}
                 y={0}
                 width={vw}
                 height={vh}
                 fill="white"
-                style={{
-                  transformBox: "fill-box",
-                  transformOrigin: "50% 50%",
-                }}
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1, rotate: spec.angle }}
+                style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}
+                initial={{ scaleX: 0, rotate: spec.angle }}
+                animate={{ scaleX: 1 }}
                 transition={{
                   duration: spec.dur,
                   delay: spec.delay,
                   ease: "easeInOut",
+                  ...(loop
+                    ? { repeat: Infinity, repeatType: "reverse" }
+                    : null),
                 }}
               />
             </mask>
           ))}
       </defs>
 
-      {/* Fills */}
+      {/* Fill group */}
       <g
         id="Layer_1-2"
         data-name="Layer_1"
-        mask={mode === "radial" ? "url(#radial-fill-mask)" : undefined}
+        mask={
+          mode === "radial"
+            ? `url(#${RADIAL_ID})`
+            : mode === "loader"
+            ? `url(#${LOADER_ID})`
+            : undefined
+        }
         style={{ color }}
       >
         {mode === "random" ? (
-          // Each path is revealed by its own mask (wipe) instead of opacity fade
+          // Each path revealed by its own (possibly looping) mask
           randomSpec.map((_, i) => (
-            <g key={`p-${i}`} mask={`url(#rand-mask-${i})`}>
+            <g key={`p-${i}`} mask={`url(#${RAND_ID(i)})`}>
               <path fill="currentColor" d={pathD[i]} />
             </g>
           ))
@@ -131,22 +162,24 @@ const AnimatedLogo = ({
         )}
       </g>
 
-      {/* Optional ultra-subtle breathing after reveal */}
-      <motion.g
-        style={{ color, pointerEvents: "none" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.08, 0] }}
-        transition={{
-          duration: speed * 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <g>
-          <path fill="currentColor" d={pathD[0]} />
-          <path fill="currentColor" d={pathD[1]} />
-        </g>
-      </motion.g>
+      {/* Subtle breathing overlay (disabled for loader to keep focus on pulse) */}
+      {mode !== "loader" && (
+        <motion.g
+          style={{ color, pointerEvents: "none" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.08, 0] }}
+          transition={{
+            duration: speed * 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <g>
+            <path fill="currentColor" d={pathD[0]} />
+            <path fill="currentColor" d={pathD[1]} />
+          </g>
+        </motion.g>
+      )}
     </motion.svg>
   );
 };
