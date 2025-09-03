@@ -45,8 +45,6 @@ const HeroSection = () => {
   return (
     <Stack
       bgcolor="background.default"
-      minHeight="100vh"
-      border={1}
       justifyContent="start"
       alignItems="center"
       width="100%"
@@ -97,7 +95,7 @@ const HeroSection = () => {
         justifyContent="center"
         alignItems="center"
         px={{ xs: 2, sm: 10 }}
-        py={{ xs: 5, sm: 10 }}
+        pt={{ xs: 5, sm: 10 }}
       >
         <MotionTypography
           variants={titleVariants}
