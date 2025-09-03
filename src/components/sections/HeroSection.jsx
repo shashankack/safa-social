@@ -2,8 +2,8 @@ import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
-const MotionBox = motion(Box);
-const MotionTypography = motion(Typography);
+const MotionBox = motion.create(Box);
+const MotionTypography = motion.create(Typography);
 
 // ---- Stagger controls ----
 const STAGGER_CHILDREN = 0.2;
@@ -55,7 +55,7 @@ const HeroSection = () => {
       {/* Logo */}
       <MotionBox
         position="absolute"
-        initial={{ scale: 0, opacity: 0 }}
+        initial={{ scale: .1, opacity: 0 }}
         animate={imgDone ? { scale: 1, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: "backOut" }}
         pt={4}
@@ -64,7 +64,9 @@ const HeroSection = () => {
           component="img"
           src="/images/white_logo.svg"
           alt="Logo"
-          sx={{ height: { xs: "20vw", sm: "5vw" } }}
+          sx={{
+            width: { xs: "18vw", sm: "6vw", height: "100%", display: "block" },
+          }}
         />
       </MotionBox>
 
