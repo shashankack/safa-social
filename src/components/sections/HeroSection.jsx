@@ -103,6 +103,7 @@ const HeroSection = () => {
           fontSize={{ xs: "8vw", sm: "4vw" }}
           textTransform="uppercase"
           mt={{ xs: -3, sm: -5 }}
+          color="primary.main"
         >
           Safa Social Circle
         </MotionTypography>

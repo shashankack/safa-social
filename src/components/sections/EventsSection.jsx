@@ -12,7 +12,12 @@ const EventsSection = () => {
       pb={10}
       px={{ xs: 2, sm: 10 }}
     >
-      <Typography fontFamily="Agraham" fontSize={{ xs: "4vw", sm: "1.6vw" }}>
+      <Typography
+        fontFamily="Agraham"
+        fontSize={{ xs: "4vw", sm: "1.6vw" }}
+        color="primary.main"
+        fontWeight={700}
+      >
         Upcoming Events
       </Typography>
       <Typography
