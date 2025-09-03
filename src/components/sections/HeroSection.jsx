@@ -104,7 +104,7 @@ const HeroSection = () => {
           fontFamily="Alternate Gothic"
           fontSize={{ xs: "8vw", sm: "4vw" }}
           textTransform="uppercase"
-          mt={{ xs: 0, sm: -5 }}
+          mt={{ xs: -3, sm: -5 }}
         >
           Safa Social Circle
         </MotionTypography>
