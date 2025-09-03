@@ -55,7 +55,7 @@ const HeroSection = () => {
       {/* Logo */}
       <MotionBox
         position="absolute"
-        initial={{ scale: .1, opacity: 0 }}
+        initial={{ scale: 0.1, opacity: 0 }}
         animate={imgDone ? { scale: 1, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: "backOut" }}
         pt={4}
@@ -101,8 +101,10 @@ const HeroSection = () => {
       >
         <MotionTypography
           variants={titleVariants}
-          variant="h1"
-          fontSize={{ xs: "7vw", sm: "2.4vw" }}
+          fontFamily="Alternate Gothic"
+          fontSize={{ xs: "8vw", sm: "4vw" }}
+          textTransform="uppercase"
+          mt={{ xs: 0, sm: -5 }}
         >
           Safa Social Circle
         </MotionTypography>
@@ -110,13 +112,13 @@ const HeroSection = () => {
         <MotionTypography
           variants={bodyVariants}
           variant="body1"
-          mt={4}
-          fontSize={{ xs: "3.6vw", sm: "1.4vw" }}
+          // mt={4}
+          fontSize={{ xs: "3.4vw", sm: "1.4vw" }}
           fontWeight={500}
           sx={{ textAlign: "justify", textAlignLast: "center" }}
         >
-          A space created for Muslim women to connect, share, and grow together
-          through creative events, meaningful conversations, and uplifting
+          A space created for Muslim women to connect, share and grow together
+          through creative events, meaningful conversations and uplifting
           experiences. When women gather with intention, ordinary moments turn
           into meaningful memories. Safa is not just an event it's a journey of
           connection, growth and belonging.

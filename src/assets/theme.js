@@ -17,7 +17,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Agraham",
+    fontFamily: "Alternate Gothic",
     fontSize: 14,
 
     h1: {

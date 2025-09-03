@@ -31,6 +31,11 @@ img {
 }
 
 @font-face {
+  font-family: "Alternate Gothic";
+  src: url("/fonts/AlternateGothic.otf") format("opentype");
+}
+
+@font-face {
   font-family: "Agraham";
   src: url("/fonts/Agraham.otf") format("opentype");
 }
