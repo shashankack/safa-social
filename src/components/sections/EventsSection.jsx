@@ -28,7 +28,7 @@ const EventsSection = () => {
         fontWeight={500}
         sx={{ textAlign: "justify" }}
       >
-        Stay Tuned Be the first to know about our upcoming events, Sign up and
+        Stay Tuned! be the first to know about our upcoming events, Sign up and
         stay connected as we unveil meaningful experiences designed for you.
       </Typography>
 
