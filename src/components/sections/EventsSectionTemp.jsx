@@ -193,7 +193,10 @@ function EventCard({
           alignItems="center"
           sx={{ mb: 1 }}
         >
-          <Typography variant="body1" sx={{ fontSize: 20, fontWeight: 700 }}>
+          <Typography
+            variant="body1"
+            sx={{ fontSize: 20, fontWeight: 700, color: "primary.main" }}
+          >
             {event?.title || event?.name}
           </Typography>
           <StatusChip status={event?.status} />
@@ -202,7 +205,11 @@ function EventCard({
         {event?.startAt && (
           <Typography
             variant="body1"
-            sx={{ fontSize: 15, mb: 0.5, "& span": { fontWeight: 800 } }}
+            sx={{
+              fontSize: 15,
+              mb: 0.5,
+              "& span": { fontWeight: 800, color: "primary.main" },
+            }}
           >
             <span>Time:</span> {formatRange(event.startAt, event.endAt)}
           </Typography>
@@ -212,7 +219,11 @@ function EventCard({
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ fontSize: 15, mb: 1.25, "& span": { fontWeight: 800 } }}
+            sx={{
+              fontSize: 15,
+              mb: 1.25,
+              "& span": { fontWeight: 800, color: "primary.main" },
+            }}
           >
             <span>Venue:</span> {event.venueName}
           </Typography>
@@ -225,7 +236,7 @@ function EventCard({
             sx={{
               fontSize: 14,
               fontWeight: 600,
-              "& span": { fontWeight: 800 },
+              "& span": { fontWeight: 800, color: "primary.main" },
             }}
           >
             <span>Price:</span> {priceLabel}
@@ -420,6 +431,7 @@ const EventsSectionTemp = () => {
         textAlign={{ xs: "center", md: "left" }}
         variant="body1"
         sx={{ fontSize: { xs: 22, md: 26 }, fontWeight: 800 }}
+        fontFamily={"Agraham"}
         color="primary"
         ml={{ xs: "auto", md: 10 }}
         mt={{ xs: 3, md: 6 }}

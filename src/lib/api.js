@@ -1,3 +1,4 @@
+// api.js
 import { http } from "./http";
 
 /**
@@ -28,3 +29,15 @@ export const getBooking = (id) =>
  */
 export const createOrder = (payload) =>
   http.post("/v1/payments/order", payload).then((r) => r.data);
+
+/**
+ * Clubs (/v1/club)
+ * - listClubs(params?): { q, limit, city, tag, ... } -> returns an array OR { items: [...] }
+ * - getClub(slugOrId): returns a single club object
+ * - (No register here, per your note)
+ */
+export const listClubs = (params) =>
+  http.get("/v1/club", { params }).then((r) => r.data);
+
+export const getClub = (slugOrId) =>
+  http.get(`/v1/club/${slugOrId}`).then((r) => r.data);
