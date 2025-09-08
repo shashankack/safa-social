@@ -1,16 +1,29 @@
 import React from "react";
-import { Stack, Typography } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Grid,
+  Alert,
+  CircularProgress,
+  Box,
+  Button,
+} from "@mui/material";
+import { useActivities } from "../../hooks/useActivities";
+import EventCard from "../EventCard";
+import { Link as RouterLink } from "react-router-dom";
 
-import SubmitForm from "../SubmitForm";
+export default function EventsSection() {
+  const { items, loading, error } = useActivities({ status: "upcoming" }); // server filter :contentReference[oaicite:7]{index=7}
 
-const EventsSection = () => {
   return (
     <Stack
       justifyContent="center"
-      alignItems="start"
+      alignItems="stretch"
+      bgcolor={"background.default"}
       pt={{ xs: 10, sm: 20 }}
       pb={10}
       px={{ xs: 2, sm: 10 }}
+      gap={3}
     >
       <Typography
         fontFamily="Agraham"
@@ -20,23 +33,32 @@ const EventsSection = () => {
       >
         Upcoming Events
       </Typography>
-      <Typography
-        variant="body1"
-        mt={{ xs: 2, sm: 4 }}
-        maxWidth={1000}
-        fontSize={{ xs: "3vw", sm: "1.4vw" }}
-        fontWeight={500}
-        sx={{ textAlign: "justify" }}
-      >
-        Stay Tuned! be the first to know about our upcoming events, Sign up and
-        stay connected as we unveil meaningful experiences designed for you.
-      </Typography>
 
-      <Stack mt={4} width="100%" maxWidth={800}>
-        <SubmitForm />
-      </Stack>
+      {loading && <CircularProgress size={28} sx={{ mt: 1 }} />}
+      {error && <Alert severity="error">{error}</Alert>}
+
+      {!loading && !error && (
+        <Grid container spacing={2}>
+          {items.slice(0, 6).map((it, index) => (
+            <Grid
+              key={index}
+              size={{
+                xs: 12,
+                sm: 6,
+                md: 4,
+              }}
+            >
+              <EventCard item={it} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      <Box>
+        <Button component={RouterLink} to="/events" variant="text">
+          See all events →
+        </Button>
+      </Box>
     </Stack>
   );
-};
-
-export default EventsSection;
+}

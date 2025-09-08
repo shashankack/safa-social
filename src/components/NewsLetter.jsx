@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Stack, TextField, Button, Alert } from "@mui/material";
 
-const SubmitForm = () => {
+const NewsLetter = ({ bgcolor = "#da6c81" }) => {
   const [formData, setFormData] = useState({ fullname: "", email: "" });
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
@@ -71,7 +71,8 @@ const SubmitForm = () => {
           sx={{
             px: 10,
             fontSize: 20,
-            color: "text.primary",
+            color: "#fecdd7",
+            bgcolor: bgcolor,
             fontFamily: "Alternate Gothic",
             letterSpacing: 1.5,
           }}
@@ -93,4 +94,4 @@ const SubmitForm = () => {
   );
 };
 
-export default SubmitForm;
+export default NewsLetter;

@@ -60,7 +60,7 @@ const HeroSection = () => {
       >
         <Box
           component="img"
-          src="/images/white_logo.svg"
+          src="/images/logo.svg"
           alt="Logo"
           sx={{
             width: { xs: "18vw", sm: "6vw", height: "100%", display: "block" },
