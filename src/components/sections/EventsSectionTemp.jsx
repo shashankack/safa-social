@@ -243,7 +243,7 @@ const EventCard = ({
         )}
 
         {/* Description */}
-        {event?.description && (
+        {!event?.description && (
           <Typography
             variant="body1"
             color="text.primary"
@@ -444,7 +444,7 @@ const EventsSectionTemp = () => {
         Upcoming Events
       </Typography>
 
-      <Grid container spacing={3} px={{ xs: 2, md: 10 }} py={{ xs: 10, md: 6 }}>
+      <Grid container spacing={3} px={{ xs: 3, md: 10 }} pt={{ xs: 4, md: 6 }} pb={6}>
         {pageItems.map((event) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={event.id}>
             <EventCard
