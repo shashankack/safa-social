@@ -17,7 +17,6 @@ import {
   Tooltip,
   Box,
   Pagination,
-  Divider,
 } from "@mui/material";
 import { useActivities } from "../../hooks/useActivities";
 import RegisterDialog from "../../components/RegisterDialog";
@@ -112,12 +111,12 @@ const LoadingGrid = () => (
 /* ----------------------------------------------------------
    Event Card (no redirect, body1 everywhere, What's Included accordion)
 ---------------------------------------------------------- */
-function EventCard({
+const EventCard = ({
   event,
   onRegisterClick,
   showMapButton = true,
   showPrice = true,
-}) {
+}) => {
   const isClosed =
     !event?.canBook ||
     event?.status === "past" ||
@@ -180,7 +179,7 @@ function EventCard({
             src={thumb}
             alt={event?.title || event?.name}
             loading="lazy"
-            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+            sx={{ width: "100%", objectFit: "cover" }}
           />
         </Box>
       </Box>
@@ -208,7 +207,7 @@ function EventCard({
             sx={{
               fontSize: 15,
               mb: 0.5,
-              "& span": { fontWeight: 800, color: "primary.main" },
+              "& span": { fontWeight: 800, fontSize: 16 },
             }}
           >
             <span>Time:</span> {formatRange(event.startAt, event.endAt)}
@@ -222,7 +221,7 @@ function EventCard({
             sx={{
               fontSize: 15,
               mb: 1.25,
-              "& span": { fontWeight: 800, color: "primary.main" },
+              "& span": { fontWeight: 800, fontSize: 16 },
             }}
           >
             <span>Venue:</span> {event.venueName}
@@ -236,7 +235,7 @@ function EventCard({
             sx={{
               fontSize: 14,
               fontWeight: 600,
-              "& span": { fontWeight: 800, color: "primary.main" },
+              "& span": { fontWeight: 800, fontSize: 16 },
             }}
           >
             <span>Price:</span> {priceLabel}
@@ -250,7 +249,12 @@ function EventCard({
             color="text.primary"
             fontFamily={"Alternate Gothic"}
             component="div"
-            sx={{ fontSize: 20, mt: 0.5 }}
+            sx={{
+              fontSize: 20,
+              mt: 0.5,
+              color: "text.secondary",
+              whiteSpace: "pre-line",
+            }}
           >
             {event.description}
           </Typography>
@@ -321,10 +325,12 @@ function EventCard({
           <Button
             fullWidth
             variant="outlined"
-            component="a"
-            href={event.mapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            type="button"
+            aria-label="Open map"
+            onClick={(e) => {
+              e.preventDefault();
+              if (event.mapUrl) window.open(event.mapUrl, "_blank");
+            }}
           >
             View Map
           </Button>
@@ -350,7 +356,7 @@ function EventCard({
       </CardActions>
     </Card>
   );
-}
+};
 
 /* ----------------------------------------------------------
    Main Section
@@ -362,7 +368,6 @@ const EventsSectionTemp = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [page, setPage] = useState(1);
-  const navigate = useNavigate(); // kept if you need elsewhere; not used for card click
 
   const handleOpenRegister = (activity) => {
     setSelectedActivity(activity);
@@ -430,16 +435,16 @@ const EventsSectionTemp = () => {
         width="100%"
         textAlign={{ xs: "center", md: "left" }}
         variant="body1"
-        sx={{ fontSize: { xs: 22, md: 26 }, fontWeight: 800 }}
+        sx={{ fontSize: { xs: 18, md: 26 }, fontWeight: 800 }}
         fontFamily={"Agraham"}
         color="primary"
         ml={{ xs: "auto", md: 10 }}
-        mt={{ xs: 3, md: 6 }}
+        mt={{ xs: 10, md: 6 }}
       >
         Upcoming Events
       </Typography>
 
-      <Grid container spacing={3} px={{ xs: 2, md: 10 }} py={{ xs: 3, md: 6 }}>
+      <Grid container spacing={3} px={{ xs: 2, md: 10 }} py={{ xs: 10, md: 6 }}>
         {pageItems.map((event) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={event.id}>
             <EventCard
