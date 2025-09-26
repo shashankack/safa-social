@@ -31,6 +31,16 @@ img {
 }
 
 @font-face {
+  font-family: "Awesome Ways";
+  src: url("/fonts/Awesome_Ways.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Priestacy";
+  src: url("/fonts/Priestacy.otf") format("opentype");
+}
+
+@font-face {
   font-family: "Alternate Gothic";
   src: url("/fonts/AlternateGothic.otf") format("opentype");
 }

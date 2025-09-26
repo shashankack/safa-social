@@ -57,6 +57,7 @@ const HeroSection = () => {
         animate={imgDone ? { scale: 1, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: "backOut" }}
         pt={4}
+        zIndex={10}
       >
         <Box
           component="img"
@@ -69,7 +70,15 @@ const HeroSection = () => {
       </MotionBox>
 
       {/* Image Box */}
-      <Box height="60vh" width="100%" overflow="hidden">
+      <Box height={"60vh"} width="100%" overflow="hidden" position="relative">
+        <Box
+          width="100%"
+          height="100%"
+          position="absolute"
+          top={0}
+          left={0}
+          bgcolor="#00000090"
+        />
         <motion.img
           src="/images/hero_image.jpg"
           initial={{ y: "100%", opacity: 0 }}
@@ -96,13 +105,18 @@ const HeroSection = () => {
         alignItems="center"
         px={{ xs: 2, sm: 10 }}
         pt={{ xs: 5, sm: 10 }}
+        pb={{ xs: 5, sm: 10 }}
+        sx={{
+          background: "linear-gradient(180deg, rgba(244, 234, 207, 0) 0%, rgba(244, 234, 207, 1) 20%)",
+          marginTop: "-5vh",
+        }}
       >
         <MotionTypography
           variants={titleVariants}
           fontFamily="Alternate Gothic"
           fontSize={{ xs: "8vw", sm: "4vw" }}
           textTransform="uppercase"
-          mt={{ xs: -3, sm: -5 }}
+          mt={{ xs: 2, sm: 0 }}
           color="primary.main"
         >
           Safa Social Circle
@@ -111,10 +125,15 @@ const HeroSection = () => {
         <MotionTypography
           variants={bodyVariants}
           variant="body1"
-          // mt={4}
+          mt={{ xs: 3, sm: 4 }}
           fontSize={{ xs: "3.4vw", sm: "1.4vw" }}
           fontWeight={500}
-          sx={{ textAlign: "justify", textAlignLast: "center" }}
+          sx={{ 
+            textAlign: "justify", 
+            textAlignLast: "center",
+            lineHeight: { xs: 1.6, sm: 1.8 },
+            maxWidth: "900px",
+          }}
         >
           A space created for Muslim women to connect, share and grow together
           through creative events, meaningful conversations and uplifting
