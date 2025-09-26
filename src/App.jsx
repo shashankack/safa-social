@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from "react";
-import { Box } from "@mui/material";
-import AnimatedLogo from "./components/AnimatedLogo";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Loader from "./components/Loader";
+
+import { Analytics } from "@vercel/analytics/next";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -26,6 +26,7 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <Suspense fallback={<Loader />}>
+      <Analytics />
       <AppRoutes />
     </Suspense>
   );
