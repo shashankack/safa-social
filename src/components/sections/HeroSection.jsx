@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 
 const MotionBox = motion.create(Box);
@@ -41,6 +41,8 @@ const bodyVariants = {
 const HeroSection = () => {
   const [imgDone, setImgDone] = React.useState(false);
   const imageDuration = 1.2;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Stack
@@ -80,7 +82,11 @@ const HeroSection = () => {
           bgcolor="#00000090"
         />
         <motion.img
-          src="/images/hero_image.jpg"
+          src={
+            isMobile
+              ? "/images/hero_image_mobile.jpg"
+              : "/images/hero_image.jpg"
+          }
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: imageDuration, ease: "anticipate" }}
@@ -107,7 +113,8 @@ const HeroSection = () => {
         pt={{ xs: 5, sm: 10 }}
         pb={{ xs: 5, sm: 10 }}
         sx={{
-          background: "linear-gradient(180deg, rgba(244, 234, 207, 0) 0%, rgba(244, 234, 207, 1) 20%)",
+          background:
+            "linear-gradient(180deg, rgba(244, 234, 207, 0) 0%, rgba(244, 234, 207, 1) 20%)",
           marginTop: "-5vh",
         }}
       >
@@ -128,8 +135,8 @@ const HeroSection = () => {
           mt={{ xs: 3, sm: 4 }}
           fontSize={{ xs: "3.4vw", sm: "1.4vw" }}
           fontWeight={500}
-          sx={{ 
-            textAlign: "justify", 
+          sx={{
+            textAlign: "justify",
             textAlignLast: "center",
             lineHeight: { xs: 1.6, sm: 1.8 },
             maxWidth: "900px",
