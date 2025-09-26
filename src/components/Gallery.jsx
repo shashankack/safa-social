@@ -40,7 +40,6 @@ const Gallery = ({ images = [], title = "Gallery" }) => {
       <Accordion
         sx={{
           bgcolor: "transparent",
-          boxShadow: "none",
           border: "2px solid #da6c81",
           boxShadow: "0 4px 12px rgba(218, 108, 129, 0.2)",
           borderRadius: 3,
