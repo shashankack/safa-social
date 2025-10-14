@@ -52,45 +52,50 @@ const HeroSection = () => {
       width="100%"
       position="relative"
     >
-      {/* Logo */}
-      <MotionBox
-        position="absolute"
-        initial={{ scale: 0.1, opacity: 0 }}
-        animate={imgDone ? { scale: 1, opacity: 1 } : {}}
-        transition={{ duration: 0.4, ease: "backOut" }}
-        pt={4}
-        zIndex={10}
-      >
-        <Box
-          component="img"
-          src="/images/logo.svg"
-          alt="Logo"
-          sx={{
-            width: { xs: "18vw", sm: "6vw", height: "100%", display: "block" },
-          }}
-        />
-      </MotionBox>
-
       {/* Image Box */}
-      <Box height={"60vh"} width="100%" overflow="hidden" position="relative">
+      <Box
+        height={{ xs: "50vh", md: "80vh" }}
+        width="100%"
+        overflow="hidden"
+        position="relative"
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: { xs: "90%", md: "50%" },
+            zIndex: 2,
+            color: "white",
+            fontSize: isMobile ? "3.4vw" : "1.6vw",
+            transform: "translate(-50%, -50%)",
+            fontFamily: "Baskerville",
+          }}
+        >
+          When women gather with intention, ordinary moments turn into
+          meaningful memories. Safa is not just an event it's a journey of
+          connection, growth and belonging
+        </Typography>
         <Box
           width="100%"
           height="100%"
           position="absolute"
           top={0}
           left={0}
+          zIndex={1}
           bgcolor="#00000090"
         />
-        <motion.img
-          src={
-            isMobile
-              ? "/images/hero_image_mobile.jpg"
-              : "/images/hero_image.jpg"
-          }
-          initial={{ y: "100%", opacity: 0 }}
+        <motion.video
+          src="https://res.cloudinary.com/dyclqcoqp/video/upload/v1760460093/IMG_7695_ia5s4q.mov"
+          initial={{ y: "100%", opacity: 1 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: imageDuration, ease: "anticipate" }}
           onAnimationComplete={() => setImgDone(true)}
+          autoPlay
+          muted
+          loop
+          playsInline
           style={{
             width: "100%",
             height: "100%",
@@ -119,34 +124,46 @@ const HeroSection = () => {
         }}
       >
         <MotionTypography
+          variant="h1"
           variants={titleVariants}
-          fontFamily="Alternate Gothic"
-          fontSize={{ xs: "8vw", sm: "4vw" }}
-          textTransform="uppercase"
-          mt={{ xs: 2, sm: 0 }}
-          color="primary.main"
+          sx={{
+            fontSize: { xs: "8vw", sm: "6vw", md: "4vw" },
+            mt: { xs: 4, sm: 6 },
+          }}
         >
-          Safa Social Circle
+          About us
         </MotionTypography>
 
         <MotionTypography
           variants={bodyVariants}
           variant="body1"
-          mt={{ xs: 3, sm: 4 }}
-          fontSize={{ xs: "3.4vw", sm: "1.4vw" }}
-          fontWeight={500}
           sx={{
-            textAlign: "justify",
-            textAlignLast: "center",
+            mt: { xs: 3, sm: 5 },
+            fontSize: { xs: "3.2vw", sm: "3vw", md: "1vw" },
+            fontWeight: 600,
+            textAlign: "center",
             lineHeight: { xs: 1.6, sm: 1.8 },
             maxWidth: "900px",
+            "& span": { color: "primary.main", fontWeight: 700 },
           }}
         >
-          A space created for Muslim women to connect, share and grow together
-          through creative events, meaningful conversations and uplifting
-          experiences. When women gather with intention, ordinary moments turn
-          into meaningful memories. Safa is not just an event it's a journey of
-          connection, growth and belonging.
+          Welcome to Safa Social Circle a space where women gather and leave as
+          part of a community.
+          <br />
+          <br />
+          Safa was of a simple idea to create moments that bring women together
+          beyond small talk and social media. Through workshops, shared
+          experiences and intentional gatherings we make space for genuine
+          connection, creativity and growth.
+          <br />
+          <br />
+          It’s where stories are shared, boundaries are respected and laughter
+          feels easy Where every event feels less like an occasion and more like
+          coming home to yourself and to the women around you.
+          <br />
+          <br />
+          Because at the heart of it all Safa is{" "}
+          <span>#MadeForYouToBelong</span>
         </MotionTypography>
       </Stack>
     </Stack>

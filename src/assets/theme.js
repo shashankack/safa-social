@@ -17,22 +17,16 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Alternate Gothic",
+    fontFamily: "Montserrat, sans-serif",
     fontSize: 14,
 
     h1: {
-      color: "#1a3e12",
-    },
-    h2: {
+      fontFamily: "Tan Nimbus",
       color: "#da6c81",
-      fontFamily: "Agraham",
     },
-    h3: {
-      fontFamily: "Awesome Ways",
-    },
+
     body1: {
-      color: "#1a3e12",
-      fontFamily: "Manrope",
+      color: "#000",
     },
   },
 });

@@ -1,11 +1,12 @@
 import React from "react";
 import HeroSection from "../components/sections/HeroSection";
+import UpcomingEventsSection from "../components/sections/UpcomingEventsSection";
 import EventsSection from "../components/sections/EventsSection";
-import EventsSectionTemp from "../components/sections/EventsSectionTemp";
 const Home = () => {
   return (
     <>
       <HeroSection />
+      <UpcomingEventsSection />
       <EventsSection />
     </>
   );

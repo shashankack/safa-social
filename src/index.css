@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 * {
   padding: 0;
@@ -31,47 +31,16 @@ img {
 }
 
 @font-face {
-  font-family: "Awesome Ways";
-  src: url("/fonts/Awesome_Ways.otf") format("opentype");
+  font-family: "Tan Nimbus";
+  src: url("/fonts/tan-nimbus.otf") format("opentype");
 }
 
 @font-face {
-  font-family: "Priestacy";
-  src: url("/fonts/Priestacy.otf") format("opentype");
+  font-family: "Baskerville";
+  src: url("/fonts/BaskervilleBT.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "Alternate Gothic";
-  src: url("/fonts/AlternateGothic.otf") format("opentype");
-}
-
-@font-face {
-  font-family: "Agraham";
-  src: url("/fonts/Agraham.otf") format("opentype");
-}
-
-@font-face {
-  font-family: "Melodrama";
-  src: url("/fonts/Melodrama-Regular.ttf") format("truetype");
-  font-weight: 400;
-}
-@font-face {
-  font-family: "Melodrama";
-  src: url("/fonts/Melodrama-Medium.ttf") format("truetype");
-  font-weight: 500;
-}
-@font-face {
-  font-family: "Melodrama";
-  src: url("/fonts/Melodrama-Light.ttf") format("truetype");
-  font-weight: 200;
-}
-@font-face {
-  font-family: "Melodrama";
-  src: url("/fonts/Melodrama-Semibold.ttf") format("truetype");
-  font-weight: 600;
-}
-@font-face {
-  font-family: "Melodrama";
-  src: url("/fonts/Melodrama-Bold.ttf") format("truetype");
-  font-weight: 800;
+  font-family: "Helvetica Now";
+  src: url("/fonts/HelveticaNow.ttf") format("truetype");
 }
