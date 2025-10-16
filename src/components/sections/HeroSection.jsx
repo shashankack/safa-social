@@ -53,12 +53,7 @@ const HeroSection = () => {
       position="relative"
     >
       {/* Image Box */}
-      <Box
-        height={{ xs: "50vh", md: "80vh" }}
-        width="100%"
-        overflow="hidden"
-        position="relative"
-      >
+      <Box height={"80vh"} width="100%" overflow="hidden" position="relative">
         <Typography
           variant="body1"
           sx={{
@@ -87,7 +82,7 @@ const HeroSection = () => {
           bgcolor="#00000090"
         />
         <motion.video
-          src="https://res.cloudinary.com/dyclqcoqp/video/upload/v1760460093/IMG_7695_ia5s4q.mov"
+          src="https://res.cloudinary.com/dyclqcoqp/video/upload/v1760636144/IMG_7814_gtgeo5.mp4"
           initial={{ y: "100%", opacity: 1 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: imageDuration, ease: "anticipate" }}
@@ -118,8 +113,6 @@ const HeroSection = () => {
         pt={{ xs: 5, sm: 10 }}
         pb={{ xs: 5, sm: 10 }}
         sx={{
-          background:
-            "linear-gradient(180deg, rgba(244, 234, 207, 0) 0%, rgba(244, 234, 207, 1) 20%)",
           marginTop: "-5vh",
         }}
       >
@@ -139,10 +132,11 @@ const HeroSection = () => {
           variant="body1"
           sx={{
             mt: { xs: 3, sm: 5 },
-            fontSize: { xs: "3.2vw", sm: "3vw", md: "1vw" },
+            fontSize: { xs: "3vw", sm: "2vw", md: ".8vw" },
             fontWeight: 600,
-            textAlign: "center",
-            lineHeight: { xs: 1.6, sm: 1.8 },
+            textAlign: "justify",
+            textAlignLast: "center",
+            lineHeight: { xs: 1.6, sm: 1.3 },
             maxWidth: "900px",
             "& span": { color: "primary.main", fontWeight: 700 },
           }}

@@ -1,9 +1,19 @@
 import React from "react";
-import { Box, Grid, Card, CardMedia, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Card,
+  CardMedia,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useActivities } from "../../hooks/useActivities";
 
 const UpcomingEventsSection = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { items } = useActivities({ status: "upcoming" });
 
   if (items.length > 0) {
@@ -36,15 +46,6 @@ const UpcomingEventsSection = () => {
         </Box>
         <Grid container spacing={4} justifyContent="center">
           {items.map((event) => {
-            const thumb =
-              (Array.isArray(event?.thumbnailUrls) && event.thumbnailUrls[0]) ||
-              event?.coverImageUrl ||
-              event?.thumbnailUrl ||
-              event?.imageUrl ||
-              event?.bannerUrl ||
-              `https://placehold.co/800x450?text=${encodeURIComponent(
-                event?.title || event?.name || "Event"
-              )}`;
             return (
               <Grid
                 size={{
@@ -105,7 +106,11 @@ const UpcomingEventsSection = () => {
                     >
                       <CardMedia
                         component="img"
-                        src={thumb}
+                        src={
+                          isMobile
+                            ? event.thumbnailUrls[1]
+                            : event.thumbnailUrls[0]
+                        }
                         alt={event?.title || event?.name}
                         loading="lazy"
                         sx={{
