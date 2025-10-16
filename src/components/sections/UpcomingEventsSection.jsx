@@ -106,11 +106,7 @@ const UpcomingEventsSection = () => {
                     >
                       <CardMedia
                         component="img"
-                        src={
-                          isMobile
-                            ? event.thumbnailUrls[1]
-                            : event.thumbnailUrls[0]
-                        }
+                        src={event.thumbnailUrls[1]}
                         alt={event?.title || event?.name}
                         loading="lazy"
                         sx={{
