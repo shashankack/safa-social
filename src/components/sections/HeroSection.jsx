@@ -134,8 +134,7 @@ const HeroSection = () => {
             mt: { xs: 3, sm: 5 },
             fontSize: { xs: "3vw", sm: "2vw", md: ".8vw" },
             fontWeight: 600,
-            textAlign: "justify",
-            textAlignLast: "center",
+            textAlign: "center",
             lineHeight: { xs: 1.6, sm: 1.3 },
             maxWidth: "900px",
             "& span": { color: "primary.main", fontWeight: 700 },
@@ -156,7 +155,7 @@ const HeroSection = () => {
           coming home to yourself and to the women around you.
           <br />
           <br />
-          Because at the heart of it all Safa is{" "}
+          Because at the heart of it all Safa is <br />
           <span>#MadeForYouToBelong</span>
         </MotionTypography>
       </Stack>
