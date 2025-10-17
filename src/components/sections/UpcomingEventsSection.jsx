@@ -18,43 +18,11 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 const UpcomingEventsSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  // const { items } = useActivities({ status: "upcoming" });
-
-  const items = [
-    {
-      id: "8014c11c-b3c9-4d06-9309-366ef43f85a5",
-      slug: "perfume-making-workshop",
-      title: "Perfume Making Workshop",
-      description:
-        '<p class="activity-description">\r\n  Join us for an immersive Perfume Making Workshop where you’ll explore\r\n  different fragrance notes and create your own perfume.\r\n  <br />\r\n  <br />\r\n  Enjoy a relaxing afternoon with good food and better company. Includes a\r\n  welcome drink, 1 starter, 1 main course and dessert at Justbe Cafe\r\n</p>',
-      additionalNotes: null,
-      startAt: "2025-10-25T06:00:00.000Z",
-      endAt: "2025-10-25T08:00:00.000Z",
-      totalSlots: 100,
-      bookedSlots: 0,
-      venueName: "Justbe Cafe",
-      thumbnailUrls: [
-        "https://res.cloudinary.com/dyclqcoqp/image/upload/v1760637065/Safa_fragor_poster_web_zeq2bx.png",
-        "https://res.cloudinary.com/dyclqcoqp/image/upload/v1760637067/Safa_fragor_poster_copy_ymnnwe.png",
-      ],
-      galleryUrls: [],
-      mapUrl: "https://maps.app.goo.gl/uDS76hoZajPZPDLT9",
-      currency: "INR",
-      registrationFee: 150000,
-      isPublished: true,
-      clubId: null,
-      clubName: null,
-      clubSlug: null,
-      typeId: "c0fc2add-b700-414f-9e7f-5a0ba5833f2f",
-      typeName: "One Time",
-      status: "upcoming",
-      canBook: true,
-    },
-  ];
+  const { items } = useActivities({ status: "upcoming" });
 
   const handleRegisterClick = (event) => {
-    // Placeholder for Google Form redirect in future
-    console.log("Register clicked for event:", event.id);
+    const registrationLink = "https://forms.gle/F1YzMHq8VSFRh61p7";
+    window.open(registrationLink, "_blank");
   };
 
   const formatDate = (dateString) => {
