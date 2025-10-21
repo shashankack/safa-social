@@ -121,7 +121,7 @@ const MusicControl = () => {
         </IconButton>
       </Tooltip>
 
-      <Box sx={{ width: 120, ml: 1 }}>
+      {/* <Box sx={{ width: 120, ml: 1 }}>
         <Slider
           value={volume}
           onChange={handleVolume}
@@ -130,7 +130,7 @@ const MusicControl = () => {
           step={0.01}
           aria-label="volume"
         />
-      </Box>
+      </Box> */}
     </Box>
   );
 };
