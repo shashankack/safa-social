@@ -64,17 +64,11 @@ const EventsSection = () => {
         }}
       >
         {events.map((event) => {
-          // Use index 0 for desktop, index 1 for mobile
-          const thumbnailUrl = isMobile
-            ? event.thumbnailUrls?.[1] || event.thumbnailUrls?.[0]
-            : event.thumbnailUrls?.[0] || event.thumbnailUrls?.[1];
-
           return (
             <SwiperSlide key={event.id}>
               <Box
                 sx={{
                   position: "relative",
-                  minWidth: 320,
                   height: 400,
                   display: "flex",
                   alignItems: "center",
@@ -86,19 +80,24 @@ const EventsSection = () => {
                   overflow: "hidden",
                 }}
               >
-                {thumbnailUrl && (
-                  <Box
-                    component="img"
-                    src={thumbnailUrl}
-                    alt={event.title}
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: 3,
-                    }}
-                  />
-                )}
+                <Box
+                  component="img"
+                  src={
+                    Array.isArray(event.imageUrls?.[0])
+                      ? isMobile
+                        ? event.imageUrls[0][1]
+                        : event.imageUrls[0][0]
+                      : event.imageUrls?.[0]
+                  }
+                  alt={event.title}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: 3,
+                  }}
+                />
+
                 <Button
                   variant="contained"
                   color="primary"

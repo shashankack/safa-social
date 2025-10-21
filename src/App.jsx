@@ -4,6 +4,7 @@ import Loader from "./components/Loader";
 
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -30,6 +31,7 @@ const App = () => {
       <Navbar />
       <Analytics />
       <AppRoutes />
+      <Footer />
     </Suspense>
   );
 };

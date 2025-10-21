@@ -7,7 +7,7 @@ const Home = () => {
     <>
       <HeroSection />
       <UpcomingEventsSection />
-      <EventsSection />
+      {/* <EventsSection /> */}
     </>
   );
 };

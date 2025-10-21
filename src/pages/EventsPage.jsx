@@ -26,9 +26,10 @@ export default function EventsPage() {
   // Get all activities and filter based on tab
   const { items: allItems, loading, error } = useActivities();
 
+  // Filter by status (upcoming, live, completed, canceled)
   const upcomingItems = allItems.filter((item) => item.status === "upcoming");
-  const pastItems = allItems.filter((item) => item.status === "past");
-  const ongoingItems = allItems.filter((item) => item.status === "ongoing");
+  const liveItems = allItems.filter((item) => item.status === "live");
+  const completedItems = allItems.filter((item) => item.status === "completed");
 
   const getCurrentItems = () => {
     switch (tabValue) {
@@ -37,9 +38,9 @@ export default function EventsPage() {
       case 1:
         return upcomingItems;
       case 2:
-        return ongoingItems;
+        return liveItems;
       case 3:
-        return pastItems;
+        return completedItems;
       default:
         return allItems;
     }
@@ -47,8 +48,8 @@ export default function EventsPage() {
 
   const currentItems = getCurrentItems();
 
-  {
-    loading && <Loader />;
+  if (loading) {
+    return <Loader />;
   }
 
   return (
@@ -144,7 +145,7 @@ export default function EventsPage() {
           >
             <Tab label="All" />
             <Tab label="Upcoming" />
-            <Tab label="Ongoing" />
+            <Tab label="Live" />
             <Tab label="Completed" />
           </Tabs>
         </Box>
@@ -205,15 +206,25 @@ export default function EventsPage() {
         {/* Events Grid */}
         <Grid container spacing={4} justifyContent="center">
           {currentItems.map((event) => {
-            const thumbnail =
-              (Array.isArray(event?.thumbnailUrls) && event.thumbnailUrls[0]) ||
-              event?.coverImageUrl ||
-              event?.thumbnailUrl ||
-              event?.imageUrl ||
-              event?.bannerUrl ||
-              `https://placehold.co/800x450?text=${encodeURIComponent(
-                event?.title || event?.name || "Event"
-              )}`;
+            // Get thumbnail from evently activity structure, supporting nested array [desktop, mobile]
+            let thumbnail;
+            if (
+              Array.isArray(event?.imageUrls) &&
+              Array.isArray(event.imageUrls[0])
+            ) {
+              // Nested array: [desktop, mobile]
+              thumbnail = isMobile
+                ? event.imageUrls[0][1]
+                : event.imageUrls[0][0];
+            } else if (Array.isArray(event?.imageUrls)) {
+              thumbnail = event.imageUrls[0];
+            } else {
+              thumbnail =
+                event?.coverImageUrl ||
+                `https://placehold.co/800x450?text=${encodeURIComponent(
+                  event?.name || "Event"
+                )}`;
+            }
 
             return (
               <Grid
@@ -265,7 +276,7 @@ export default function EventsPage() {
                   <CardMedia
                     component="img"
                     image={thumbnail}
-                    alt={event?.title || event?.name}
+                    alt={event?.name}
                     sx={{
                       width: "100%",
                       height: "100%",

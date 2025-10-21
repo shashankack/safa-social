@@ -2,42 +2,29 @@
 import { http } from "./http";
 
 /**
- * Activities (/v1/activity)
- * - Optional params: { status: "upcoming" | "past" | "live", q, limit, ... }
+ * Activities API (evently backend)
+ * - List all activities for the authenticated organizer
+ * - Supports query filters: status, type, clubId, page, limit, sortBy, order
  */
 export const listActivities = (params) =>
-  http.get("/v1/activity", { params }).then((r) => r.data);
-
-export const getActivity = (slugOrId) =>
-  http.get(`/v1/activity/${slugOrId}`).then((r) => r.data);
+  http.get("/activities", { params }).then((r) => r.data);
 
 /**
- * Bookings (/v1/booking)
- * - Guest payload: { activityId, qty, guest: { name, email, phone } }
- * - Returns (example): { bookingId, amount, currency }
+ * Get single activity details
  */
-export const createBooking = (payload) =>
-  http.post("/v1/booking", payload).then((r) => r.data);
-
-export const getBooking = (id) =>
-  http.get(`/v1/booking/${id}`).then((r) => r.data);
+export const getActivity = (id) =>
+  http.get(`/activities/${id}`).then((r) => r.data);
 
 /**
- * Payments (/v1/payments/order)
- * - Input: { bookingId }
- * - Returns: { orderId, amount, currency, key }
+ * Register for an activity
+ * - POST /activities/:id/register
+ * - Body: { firstName, lastName, email, phone, ticketCount }
  */
-export const createOrder = (payload) =>
-  http.post("/v1/payments/order", payload).then((r) => r.data);
+export const registerForActivity = (activityId, payload) =>
+  http.post(`/activities/${activityId}/register`, payload).then((r) => r.data);
 
 /**
- * Clubs (/v1/club)
- * - listClubs(params?): { q, limit, city, tag, ... } -> returns an array OR { items: [...] }
- * - getClub(slugOrId): returns a single club object
- * - (No register here, per your note)
+ * Get current organizer info
  */
-export const listClubs = (params) =>
-  http.get("/v1/club", { params }).then((r) => r.data);
-
-export const getClub = (slugOrId) =>
-  http.get(`/v1/club/${slugOrId}`).then((r) => r.data);
+export const getOrganizerInfo = () =>
+  http.get("/organizers/me").then((r) => r.data);

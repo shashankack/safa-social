@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
+import MusicControl from "../MusicControl";
 
 const MotionBox = motion.create(Box);
 const MotionTypography = motion.create(Typography);
@@ -53,7 +54,20 @@ const HeroSection = () => {
       position="relative"
     >
       {/* Image Box */}
-      <Box height={"80vh"} width="100%" overflow="hidden" position="relative">
+      <Box
+        height={{ xs: "50vh", md: "80vh" }}
+        width="100%"
+        overflow="hidden"
+        position="relative"
+      >
+        <Box
+          position="absolute"
+          bottom={{ xs: 0, md: 16 }}
+          left={16}
+          zIndex={3}
+        >
+          <MusicControl />
+        </Box>
         <Typography
           variant="body1"
           sx={{
@@ -79,10 +93,14 @@ const HeroSection = () => {
           top={0}
           left={0}
           zIndex={1}
-          bgcolor="#00000090"
+          bgcolor="#000000aa"
         />
         <motion.video
-          src="https://res.cloudinary.com/dyclqcoqp/video/upload/v1760636144/IMG_7814_gtgeo5.mp4"
+          src={
+            isMobile
+              ? "https://res.cloudinary.com/dyclqcoqp/video/upload/v1761050369/IMG_7814_xijj9j.mov"
+              : "https://res.cloudinary.com/dyclqcoqp/video/upload/v1761050394/IMG_7723_qwbd3n.mov"
+          }
           initial={{ y: "100%", opacity: 1 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: imageDuration, ease: "anticipate" }}

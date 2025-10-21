@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -10,19 +10,26 @@ import {
   Chip,
   useTheme,
   useMediaQuery,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useActivities } from "../../hooks/useActivities";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RegisterDialog from "../RegisterDialog";
 
 const UpcomingEventsSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { items } = useActivities({ status: "upcoming" });
+  const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
 
-  const handleRegisterClick = (event) => {
-    const registrationLink = "https://forms.gle/F1YzMHq8VSFRh61p7";
-    window.open(registrationLink, "_blank");
+  const handleRegisterClick = (activity) => {
+    setSelectedActivity(activity);
+    setRegisterDialogOpen(true);
   };
 
   const formatDate = (dateString) => {
@@ -49,46 +56,71 @@ const UpcomingEventsSection = () => {
     });
   };
 
-  const formatPrice = (price, currency) => {
-    return `₹${(price / 100).toFixed(2)}`;
+  const formatPrice = (priceInPaise) => {
+    return `₹${(priceInPaise / 100).toFixed(2)}`;
   };
 
   if (items.length > 0) {
     // Show only the first event
-    const event = items[0];
-    const dateInfo = formatDate(event.startAt);
-    const timeInfo = formatTime(event.startAt);
-    const priceInfo = formatPrice(event.registrationFee, event.currency);
+    const activity = items[0];
 
-    // Use index 0 for PC (desktop), index 1 for mobile
+    // Format date/time based on activity type
+    let dateInfo, timeInfo;
+    if (activity.type === "one-time" && activity.startDateTime) {
+      dateInfo = formatDate(activity.startDateTime);
+      timeInfo = formatTime(activity.startDateTime);
+    } else if (
+      activity.type === "recurring" &&
+      activity.schedules?.length > 0
+    ) {
+      // For recurring, show next schedule
+      const nextSchedule = activity.schedules[0];
+      dateInfo = { fullDate: `Every ${nextSchedule.dayOfWeek}` };
+      timeInfo = formatTime(nextSchedule.startTime);
+    } else {
+      dateInfo = { fullDate: "Date TBA" };
+      timeInfo = "";
+    }
+
+    const priceInfo = formatPrice(activity.registrationFee || 0);
+
+    // Use first image from imageUrls array
     const thumbnailUrl = isMobile
-      ? event.thumbnailUrls[1]
-      : event.thumbnailUrls[0];
+      ? activity.imageUrls[0][1]
+      : activity.imageUrls[0][0];
+
+    // Helper to extract first <h4> and <ul> from HTML string
+    const extractH4AndUl = (html) => {
+      if (!html) return { h4: "More information", ul: "" };
+      const h4Match = html.match(/<h4[^>]*>([\s\S]*?)<\/h4>/i);
+      const ulMatch = html.match(/<ul[^>]*>([\s\S]*?)<\/ul>/i);
+      return {
+        h4: h4Match ? h4Match[1].trim() : "More information",
+        ul: ulMatch ? ulMatch[0] : "",
+      };
+    };
+
+    const { h4: additionalInfoTitle, ul: additionalInfoList } = extractH4AndUl(
+      activity.additionalInfo
+    );
 
     return (
-      <Box py={8} px={{ xs: 2, sm: 4, md: 8 }} bgcolor="background.default">
+      <Box
+        pt={2}
+        pb={6}
+        px={{ xs: 2, sm: 4, md: 8 }}
+        bgcolor="background.default"
+      >
         <Box mb={6} textAlign="center">
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: "8vw", sm: "6vw", md: "4vw" },
+              fontSize: { xs: "7vw", sm: "6vw", md: "4vw" },
               color: "#da6c81",
               letterSpacing: 1,
-              mb: 1,
             }}
           >
             Upcoming Event
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              mt: 5,
-              color: "#1a3e12",
-              fontSize: { xs: "0.9rem", sm: "1rem" },
-              opacity: 0.8,
-            }}
-          >
-            Join us for our next amazing event
           </Typography>
         </Box>
 
@@ -108,33 +140,12 @@ const UpcomingEventsSection = () => {
               <CardMedia
                 component="img"
                 src={thumbnailUrl}
-                alt={event.title}
+                alt={activity.name}
                 loading="lazy"
                 sx={{
                   width: "100%",
                   height: { xs: "auto", lg: "100%" },
                   objectFit: "cover",
-                }}
-              />
-
-              {/* Date and Time Badge */}
-              <Chip
-                label={`${dateInfo.fullDate} | ${timeInfo}`}
-                sx={{
-                  position: "absolute",
-                  top: 16,
-                  left: 16,
-                  bgcolor: "#da6c81",
-                  color: "white",
-                  fontWeight: 600,
-                  fontSize: { xs: "0.75rem", sm: "0.85rem" },
-                  px: 1,
-                  py: 2,
-                  height: "auto",
-                  "& .MuiChip-label": {
-                    px: 1.5,
-                    py: 0.5,
-                  },
                 }}
               />
             </Box>
@@ -156,7 +167,7 @@ const UpcomingEventsSection = () => {
                   fontSize: { xs: "1.25rem", sm: "1.5rem" },
                 }}
               >
-                {event.title}
+                {activity.name}
               </Typography>
 
               {/* Venue with Icon */}
@@ -180,12 +191,12 @@ const UpcomingEventsSection = () => {
                       lineHeight: 1.5,
                     }}
                   >
-                    {event.venueName}
+                    {activity.venueName || "Venue TBA"}
                   </Typography>
-                  {event.mapUrl && (
+                  {activity.mapUrl && (
                     <Button
                       component="a"
-                      href={event.mapUrl}
+                      href={activity.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       size="small"
@@ -206,6 +217,16 @@ const UpcomingEventsSection = () => {
                     </Button>
                   )}
                 </Box>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "text.primary",
+                    fontWeight: 600,
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                  }}
+                >{`${dateInfo.fullDate}${
+                  timeInfo ? ` | ${timeInfo}` : ""
+                }`}</Typography>
               </Box>
 
               {/* Price */}
@@ -221,11 +242,48 @@ const UpcomingEventsSection = () => {
                 Price: {priceInfo}
               </Typography>
 
+              {activity.additionalInfo && (
+                <Box mb={2} mt={-2}>
+                  <Accordion sx={{ bgcolor: "transparent", boxShadow: "none" }}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon sx={{ color: "#da6c81" }} />}
+                      aria-controls="additional-info-content"
+                      id="additional-info-header"
+                      sx={{ p: 0 }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          color: "text.primary",
+                          textTransform: "none",
+                        }}
+                      >
+                        {additionalInfoTitle}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ p: 0, mt: -1 }}>
+                      <Box
+                        sx={{
+                          "& ul": {
+                            fontFamily: "Helvetica Now",
+                            pl: 3,
+                          },
+                          color: "#444",
+                        }}
+                        component="div"
+                        dangerouslySetInnerHTML={{ __html: additionalInfoList }}
+                      />
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              )}
+
               {/* Register Button */}
               <Button
                 fullWidth
                 variant="contained"
-                onClick={() => handleRegisterClick(event)}
+                onClick={() => handleRegisterClick(activity)}
+                disabled={!activity.isRegistrationOpen}
                 sx={{
                   bgcolor: "#2d2d2d",
                   color: "white",
@@ -237,16 +295,35 @@ const UpcomingEventsSection = () => {
                   "&:hover": {
                     bgcolor: "#1a1a1a",
                   },
+                  "&:disabled": {
+                    bgcolor: "#ccc",
+                    color: "#666",
+                  },
                 }}
               >
-                Register
+                {activity.isRegistrationOpen
+                  ? "Register"
+                  : "Registration Closed"}
               </Button>
             </CardContent>
           </Card>
         </Box>
+
+        {/* Registration Dialog */}
+        <RegisterDialog
+          open={registerDialogOpen}
+          onClose={() => setRegisterDialogOpen(false)}
+          activity={selectedActivity}
+          onSuccess={() => {
+            setRegisterDialogOpen(false);
+            // Optionally show success message
+          }}
+        />
       </Box>
     );
   }
+
+  return null;
 };
 
 export default UpcomingEventsSection;

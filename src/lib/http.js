@@ -8,11 +8,9 @@ export const http = axios.create({
   // timeout: 15000,
 });
 
-// Attach auth token if you add auth later
+// Authentication is now automatic via domain resolution
+// The Origin header sent by the browser is used to identify your organizer
 http.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ss_token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-
   // Bypass ngrok safety interstitial for XHR/fetch requests
   config.headers["ngrok-skip-browser-warning"] = "true";
 
