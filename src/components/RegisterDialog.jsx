@@ -113,6 +113,11 @@ export default function RegisterDialog({ open, onClose, activity, onSuccess }) {
 
     setSubmitting(true);
     try {
+      if (!activity?.slug) {
+        setErr("Registration error: Event information is missing. Please refresh the page and try again.");
+        setSubmitting(false);
+        return;
+      }
       const payload = {
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
@@ -121,7 +126,7 @@ export default function RegisterDialog({ open, onClose, activity, onSuccess }) {
         ticketCount: form.ticketCount,
       };
 
-  const result = await registerForActivity(activity.slug, payload);
+      const result = await registerForActivity(activity.slug, payload);
 
       console.log("Registration result:", result);
 
