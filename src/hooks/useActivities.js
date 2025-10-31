@@ -1,55 +1,58 @@
-import { useEffect, useMemo, useState } from "react";
-import { listActivities } from "../lib/api";
 
-export function useActivities({ status, type, clubId } = {}) {
-  const [items, setItems] = useState([]);
+import { useState, useEffect } from "react";
+import { listActivities, getActivity } from "../lib/api";
+
+// Fetch activities with optional currentStatus and count (limit)
+export function useActivities({ currentStatus, count } = {}) {
+  const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const data = await listActivities({
-          status, // upcoming, live, completed, canceled
-          type, // one-time, recurring
-          clubId,
-          page: 1,
-          limit: 50,
-          sortBy: "createdAt",
-          order: "desc",
-        });
-        if (!cancelled) {
-          // Backend returns { activities: [...] }
-          setItems(data?.activities ?? []);
+    setLoading(true);
+    setError(null);
+    const params = {};
+    if (count) params.limit = count;
+    listActivities(params)
+      .then((res) => {
+        let fetchedActivities = res.activities || [];
+        if (currentStatus) {
+          fetchedActivities = fetchedActivities.filter(
+            (activity) => activity.currentStatus === currentStatus
+          );
         }
-      } catch (e) {
-        if (!cancelled) {
-          setError(e.message || "Failed to load activities");
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [status, type, clubId]);
+        setActivities(fetchedActivities);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [currentStatus, count]);
 
-  const sorted = useMemo(
-    () =>
-      [...items].sort((a, b) => {
-        // For one-time activities, sort by startDateTime
-        if (a.startDateTime && b.startDateTime) {
-          return new Date(a.startDateTime) - new Date(b.startDateTime);
-        }
-        // For recurring or mixed, sort by createdAt
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      }),
-    [items]
-  );
+  return { activities, setActivities, loading, error };
+}
 
-  return { items: sorted, loading, error };
+// Fetch details for a single activity by slug
+export function useActivityDetails(slug) {
+  const [activity, setActivity] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!slug) return;
+    setLoading(true);
+    setError(null);
+    getActivity(slug)
+      .then((activity) => {
+        setActivity(activity || null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [slug]);
+
+  return { activity, loading, error };
 }

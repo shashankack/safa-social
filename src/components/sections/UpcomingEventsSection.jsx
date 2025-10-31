@@ -23,7 +23,7 @@ import RegisterDialog from "../RegisterDialog";
 const UpcomingEventsSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { items } = useActivities({ status: "upcoming" });
+  const { activities } = useActivities({ currentStatus: "upcoming" });
   const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
@@ -60,9 +60,9 @@ const UpcomingEventsSection = () => {
     return `₹${(priceInPaise / 100).toFixed(2)}`;
   };
 
-  if (items.length > 0) {
+  if (activities.length > 0) {
     // Show only the first event
-    const activity = items[0];
+    const activity = activities[0];
 
     // Format date/time based on activity type
     let dateInfo, timeInfo;

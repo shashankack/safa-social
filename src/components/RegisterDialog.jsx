@@ -121,7 +121,7 @@ export default function RegisterDialog({ open, onClose, activity, onSuccess }) {
         ticketCount: form.ticketCount,
       };
 
-      const result = await registerForActivity(activity.id, payload);
+  const result = await registerForActivity(activity.slug, payload);
 
       console.log("Registration result:", result);
 

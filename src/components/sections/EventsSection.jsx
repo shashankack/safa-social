@@ -16,7 +16,7 @@ import "swiper/css/effect-coverflow";
 const EventsSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { items: events, loading, error } = useActivities();
+  const { activities: events, loading, error } = useActivities();
 
   if (loading) return <Typography>Loading events...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -65,7 +65,7 @@ const EventsSection = () => {
       >
         {events.map((event) => {
           return (
-            <SwiperSlide key={event.id}>
+            <SwiperSlide key={event.slug}>
               <Box
                 sx={{
                   position: "relative",

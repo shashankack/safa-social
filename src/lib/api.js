@@ -12,16 +12,16 @@ export const listActivities = (params) =>
 /**
  * Get single activity details
  */
-export const getActivity = (id) =>
-  http.get(`/activities/${id}`).then((r) => r.data);
+export const getActivity = (slug) =>
+  http.get(`/activities/${slug}`).then((r) => r.data);
 
 /**
  * Register for an activity
  * - POST /activities/:id/register
  * - Body: { firstName, lastName, email, phone, ticketCount }
  */
-export const registerForActivity = (activityId, payload) =>
-  http.post(`/activities/${activityId}/register`, payload).then((r) => r.data);
+export const registerForActivity = (activitySlug, payload) =>
+  http.post(`/activities/${activitySlug}/register`, payload).then((r) => r.data);
 
 /**
  * Get current organizer info

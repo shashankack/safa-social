@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
-import { getActivity } from "../lib/api";
 
-export function useActivity(idOrSlug) {
-  const [data, setData] = useState(null);
+import { useState, useEffect } from "react";
+import api from "../lib/api";
+
+// Fetch details for a single activity by slug
+export function useActivity(slug) {
+  const [activity, setActivity] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    if (!idOrSlug) return;
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const d = await getActivity(idOrSlug);
-        if (!cancelled) setData(d);
-      } catch (e) {
-        if (!cancelled) setError(e.message || "Failed to load event");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [idOrSlug]);
-  return { data, loading, error };
+    if (!slug) return;
+    setLoading(true);
+    setError(null);
+    api
+      .get(`/activities/${slug}`)
+      .then((res) => {
+        setActivity(res.data.activity || null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [slug]);
+
+  return { activity, loading, error };
 }
