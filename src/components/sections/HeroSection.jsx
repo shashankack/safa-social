@@ -162,7 +162,7 @@ const HeroSection = () => {
           part of a community.
           <br />
           <br />
-          Safa was of a simple idea to create moments that bring women together
+          {/* Safa was of a simple idea to create moments that bring women together
           beyond small talk and social media. Through workshops, shared
           experiences and intentional gatherings we make space for genuine
           connection, creativity and growth.
@@ -173,7 +173,7 @@ const HeroSection = () => {
           coming home to yourself and to the women around you.
           <br />
           <br />
-          Because at the heart of it all Safa is <br />
+          Because at the heart of it all Safa is <br /> */}
           <span>#MadeForYouToBelong</span>
         </MotionTypography>
       </Stack>
