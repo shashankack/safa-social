@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import api from "../lib/api";
+import { getActivity } from "../lib/api";
 
 // Fetch details for a single activity by slug
 export function useActivity(slug) {
@@ -12,10 +12,9 @@ export function useActivity(slug) {
     if (!slug) return;
     setLoading(true);
     setError(null);
-    api
-      .get(`/activities/${slug}`)
-      .then((res) => {
-        setActivity(res.data.activity || null);
+    getActivity(slug)
+      .then((activity) => {
+        setActivity(activity.activity || null);
         setLoading(false);
       })
       .catch((err) => {
