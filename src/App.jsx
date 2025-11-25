@@ -11,7 +11,9 @@ const About = lazy(() => import("./pages/About"));
 const EventsPage = lazy(() => import("./pages/EventsPage"));
 const ActivityDetailsPage = lazy(() => import("./pages/ActivityDetailsPage"));
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage"));
-const OrganizerRegistrationsPage = lazy(() => import("./pages/OrganizerRegistrationsPage"));
+const OrganizerRegistrationsPage = lazy(() =>
+  import("./pages/OrganizerRegistrationsPage")
+);
 
 const AppRoutes = () => {
   return (
@@ -21,7 +23,10 @@ const AppRoutes = () => {
       <Route path="/events" element={<EventsPage />} />
       <Route path="/event/:slug" element={<ActivityDetailsPage />} />
       <Route path="/thank-you" element={<ThankYouPage />} />
-      <Route path="/organizer/registrations" element={<OrganizerRegistrationsPage />} />
+      <Route
+        path="/organizer/registrations"
+        element={<OrganizerRegistrationsPage />}
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
@@ -39,3 +44,5 @@ const App = () => {
 };
 
 export default App;
+
+

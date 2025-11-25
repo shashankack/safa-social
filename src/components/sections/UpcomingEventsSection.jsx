@@ -91,7 +91,7 @@ const UpcomingEventsSection = () => {
 
     // Helper to extract first <h4> and <ul> from HTML string
     const extractH4AndUl = (html) => {
-      if (!html) return { h4: "More information", ul: "" };
+      if (!html || typeof html !== "string") return { h4: "More information", ul: "" };
       const h4Match = html.match(/<h4[^>]*>([\s\S]*?)<\/h4>/i);
       const ulMatch = html.match(/<ul[^>]*>([\s\S]*?)<\/ul>/i);
       return {
