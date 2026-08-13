@@ -318,7 +318,7 @@ export default function RegisterDialog({ open, onClose, activity, onSuccess }) {
             }}
           >
             <img
-              src="/images/qr.PNG"
+              src="/images/qr.jpeg"
               alt="QR Code"
               style={{ width: 180, borderRadius: 8, marginBottom: 8 }}
             />
