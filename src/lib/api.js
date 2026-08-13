@@ -28,3 +28,22 @@ export const registerForActivity = (activitySlug, payload) =>
  */
 export const getOrganizerInfo = () =>
   http.get("/organizers/me").then((r) => r.data);
+
+/**
+ * Organizer login — returns a JWT
+ * - POST /organizer/login
+ * - Body: { email, password }
+ */
+export const organizerLogin = (email, password) =>
+  http.post("/organizer/login", { email, password }).then((r) => r.data);
+
+/**
+ * List organizer registrations (requires Bearer token)
+ * - GET /organizer/registrations
+ */
+export const getOrganizerRegistrations = (token) =>
+  http
+    .get("/organizer/registrations", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((r) => r.data);

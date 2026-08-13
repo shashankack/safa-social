@@ -18,13 +18,7 @@ import {
   Alert,
 } from "@mui/material";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-
-function formatDateTime(dt) {
-  return new Date(dt).toLocaleString(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
-}
+import { organizerLogin, getOrganizerRegistrations } from "../lib/api";
 
 export default function OrganizerRegistrationsPage() {
   const theme = useTheme();
@@ -32,7 +26,6 @@ export default function OrganizerRegistrationsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Get params from URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const email = params.get("email");
@@ -42,17 +35,14 @@ export default function OrganizerRegistrationsPage() {
       setLoading(false);
       return;
     }
-    fetch(
-      `https://evntly.shashank-ac-dev.workers.dev/organizer/registrations?email=${encodeURIComponent(
-        email
-      )}&password=${encodeURIComponent(password)}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.error) setError(json.error);
-        else setData(json);
+
+    organizerLogin(email, password)
+      .then(({ token }) => {
+        if (!token) throw new Error("Login did not return a token.");
+        return getOrganizerRegistrations(token);
       })
-      .catch(() => setError("Failed to fetch data."))
+      .then((json) => setData(json))
+      .catch((err) => setError(err.message || "Failed to fetch data."))
       .finally(() => setLoading(false));
   }, []);
 
