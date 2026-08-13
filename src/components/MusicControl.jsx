@@ -94,7 +94,7 @@ const MusicControl = () => {
         p: 0.5,
       }}
     >
-      <audio ref={audioRef} src="/lost_my_mind.mp3" loop />
+      <audio ref={audioRef} src="/audio/bi-saraha.mp3" loop />
 
       <Tooltip title={playing ? "Pause music" : "Play music"}>
         <IconButton
