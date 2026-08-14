@@ -37,6 +37,10 @@ export const getOrganizerInfo = () =>
 export const organizerLogin = (email, password) =>
   http.post("/organizer/login", { email, password }).then((r) => r.data);
 
+const organizerAuth = (token) => ({
+  Authorization: `Bearer ${token}`,
+});
+
 /**
  * List organizer registrations (requires Bearer token)
  * - GET /organizer/registrations
@@ -44,6 +48,61 @@ export const organizerLogin = (email, password) =>
 export const getOrganizerRegistrations = (token) =>
   http
     .get("/organizer/registrations", {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: organizerAuth(token),
+    })
+    .then((r) => r.data);
+
+/**
+ * Confirm a pending (manual) registration after payment is verified
+ * - PATCH /organizer/registrations/:registrationId/confirm
+ */
+export const confirmOrganizerRegistration = (token, registrationId) =>
+  http
+    .patch(`/organizer/registrations/${registrationId}/confirm`, null, {
+      headers: organizerAuth(token),
+    })
+    .then((r) => r.data);
+
+/**
+ * Cancel a pending registration
+ * - PATCH /organizer/registrations/:registrationId/cancel
+ */
+export const cancelOrganizerRegistration = (token, registrationId) =>
+  http
+    .patch(`/organizer/registrations/${registrationId}/cancel`, null, {
+      headers: organizerAuth(token),
+    })
+    .then((r) => r.data);
+
+/**
+ * Mark a confirmed registration as attended
+ * - PATCH /organizer/registrations/:registrationId/attendance
+ */
+export const markOrganizerAttendance = (token, registrationId) =>
+  http
+    .patch(`/organizer/registrations/${registrationId}/attendance`, null, {
+      headers: organizerAuth(token),
+    })
+    .then((r) => r.data);
+
+/**
+ * Confirm a waiting-list registrant (moves them to registered)
+ * - PATCH /organizer/waiting-list/:registrationId/confirm
+ */
+export const confirmWaitingListRegistration = (token, registrationId) =>
+  http
+    .patch(`/organizer/waiting-list/${registrationId}/confirm`, null, {
+      headers: organizerAuth(token),
+    })
+    .then((r) => r.data);
+
+/**
+ * Remove someone from the waiting list
+ * - PATCH /organizer/waiting-list/:registrationId/remove
+ */
+export const removeWaitingListRegistration = (token, registrationId) =>
+  http
+    .patch(`/organizer/waiting-list/${registrationId}/remove`, null, {
+      headers: organizerAuth(token),
     })
     .then((r) => r.data);
