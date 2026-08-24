@@ -3,6 +3,8 @@ export const getStatusBadge = (status) => {
   switch ((status || "").toLowerCase()) {
     case "upcoming":
       return { label: "Upcoming", color: "primary" };
+    case "live":
+      return { label: "Live", color: "error" };
     case "past":
       return { label: "Completed", color: "primary" };
     case "cancelled":

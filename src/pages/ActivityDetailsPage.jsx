@@ -162,7 +162,9 @@ const ActivityDetailsPage = () => {
                 {formatTime(activity.startAt)}
               </Typography>
             </Stack>
-            {activity.status === "upcoming" && (
+            {(activity.currentStatus === "upcoming" ||
+              activity.currentStatus === "live" ||
+              activity.status === "upcoming") && (
               <Stack direction="row" spacing={1} alignItems="center">
                 <CurrencyRupeeIcon
                   fontSize="small"
@@ -205,7 +207,9 @@ const ActivityDetailsPage = () => {
             alignItems={{ xs: "stretch", sm: "flex-end" }}
           >
             {(() => {
-              const badge = getStatusBadge(activity.status);
+              const badge = getStatusBadge(
+                activity.currentStatus || activity.status
+              );
               return (
                 <Chip
                   label={badge.label}
@@ -258,7 +262,10 @@ const ActivityDetailsPage = () => {
         </Box>
 
         {/* Additional Notes Section */}
-        {activity.additionalNotes && activity.status === "upcoming" && (
+        {activity.additionalNotes &&
+          (activity.currentStatus === "upcoming" ||
+            activity.currentStatus === "live" ||
+            activity.status === "upcoming") && (
           <Box mb={4}>
             <FeatureList html={activity.additionalNotes} />
           </Box>

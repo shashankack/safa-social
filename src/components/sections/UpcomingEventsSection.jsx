@@ -23,7 +23,9 @@ import RegisterDialog from "../RegisterDialog";
 const UpcomingEventsSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { activities } = useActivities({ currentStatus: "upcoming" });
+  const { activities } = useActivities({
+    currentStatus: ["upcoming", "live"],
+  });
   const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
@@ -60,49 +62,34 @@ const UpcomingEventsSection = () => {
     return `₹${(priceInPaise / 100).toFixed(2)}`;
   };
 
-  if (activities.length > 0) {
-    // Show only the first event
-    const activity = activities[0];
-
-    // Format date/time based on activity type
-    let dateInfo, timeInfo;
-    if (activity.type === "one-time" && activity.startDateTime) {
-      dateInfo = formatDate(activity.startDateTime);
-      timeInfo = formatTime(activity.startDateTime);
-    } else if (
-      activity.type === "recurring" &&
-      activity.schedules?.length > 0
-    ) {
-      // For recurring, show next schedule
-      const nextSchedule = activity.schedules[0];
-      dateInfo = { fullDate: `Every ${nextSchedule.dayOfWeek}` };
-      timeInfo = formatTime(nextSchedule.startTime);
-    } else {
-      dateInfo = { fullDate: "Date TBA" };
-      timeInfo = "";
-    }
-
-    const priceInfo = formatPrice(activity.registrationFee || 0);
-
-    // Use first image from imageUrls array
-    const thumbnailUrl = isMobile
-      ? activity.imageUrls[0][1]
-      : activity.imageUrls[0][0];
-
-    // Helper to extract first <h4> and <ul> from HTML string
-    const extractH4AndUl = (html) => {
-      if (!html || typeof html !== "string") return { h4: "More information", ul: "" };
-      const h4Match = html.match(/<h4[^>]*>([\s\S]*?)<\/h4>/i);
-      const ulMatch = html.match(/<ul[^>]*>([\s\S]*?)<\/ul>/i);
-      return {
-        h4: h4Match ? h4Match[1].trim() : "More information",
-        ul: ulMatch ? ulMatch[0] : "",
-      };
+  const extractH4AndUl = (html) => {
+    if (!html || typeof html !== "string")
+      return { h4: "More information", ul: "" };
+    const h4Match = html.match(/<h4[^>]*>([\s\S]*?)<\/h4>/i);
+    const ulMatch = html.match(/<ul[^>]*>([\s\S]*?)<\/ul>/i);
+    return {
+      h4: h4Match ? h4Match[1].trim() : "More information",
+      ul: ulMatch ? ulMatch[0] : "",
     };
+  };
 
-    const { h4: additionalInfoTitle, ul: additionalInfoList } = extractH4AndUl(
-      activity.additionalInfo
-    );
+  if (activities.length > 0) {
+    const featured = [...activities].sort((a, b) => {
+      if (a.currentStatus === b.currentStatus) return 0;
+      return a.currentStatus === "live" ? -1 : 1;
+    });
+    const hasLive = featured.some((a) => a.currentStatus === "live");
+    const hasUpcoming = featured.some((a) => a.currentStatus === "upcoming");
+    const heading =
+      hasLive && hasUpcoming
+        ? "Events"
+        : hasLive
+          ? featured.length > 1
+            ? "Live Events"
+            : "Live Event"
+          : featured.length > 1
+            ? "Upcoming Events"
+            : "Upcoming Event";
 
     return (
       <Box
@@ -120,11 +107,49 @@ const UpcomingEventsSection = () => {
               letterSpacing: 1,
             }}
           >
-            Upcoming Event
+            {heading}
           </Typography>
         </Box>
 
-        <Box display="flex" justifyContent="center">
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          gap={6}
+        >
+          {featured.map((activity) => {
+            let dateInfo, timeInfo;
+            if (activity.type === "one-time" && activity.startDateTime) {
+              dateInfo = formatDate(activity.startDateTime);
+              timeInfo = formatTime(activity.startDateTime);
+            } else if (
+              activity.type === "recurring" &&
+              activity.schedules?.length > 0
+            ) {
+              const nextSchedule = activity.schedules[0];
+              dateInfo = { fullDate: `Every ${nextSchedule.dayOfWeek}` };
+              timeInfo = formatTime(nextSchedule.startTime);
+            } else {
+              dateInfo = { fullDate: "Date TBA" };
+              timeInfo = "";
+            }
+
+            const priceInfo = formatPrice(activity.registrationFee || 0);
+            const thumbnailUrl = Array.isArray(activity.imageUrls?.[0])
+              ? isMobile
+                ? activity.imageUrls[0][1] || activity.imageUrls[0][0]
+                : activity.imageUrls[0][0]
+              : activity.imageUrls?.[0];
+            const { h4: additionalInfoTitle, ul: additionalInfoList } =
+              extractH4AndUl(activity.additionalInfo);
+
+            return (
+        <Box
+          key={activity.slug || activity.name}
+          display="flex"
+          justifyContent="center"
+          width="100%"
+        >
           <Card
             sx={{
               maxWidth: { xs: 400, md: "70%" },
@@ -137,6 +162,20 @@ const UpcomingEventsSection = () => {
           >
             {/* Event Image with Date Badge */}
             <Box sx={{ position: "relative" }}>
+              {activity.currentStatus === "live" && (
+                <Chip
+                  label="Live"
+                  color="error"
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    top: 16,
+                    left: 16,
+                    zIndex: 2,
+                    fontWeight: 700,
+                  }}
+                />
+              )}
               <CardMedia
                 component="img"
                 src={thumbnailUrl}
@@ -308,15 +347,16 @@ const UpcomingEventsSection = () => {
             </CardContent>
           </Card>
         </Box>
+            );
+          })}
+        </Box>
 
-        {/* Registration Dialog */}
         <RegisterDialog
           open={registerDialogOpen}
           onClose={() => setRegisterDialogOpen(false)}
           activity={selectedActivity}
           onSuccess={() => {
             setRegisterDialogOpen(false);
-            // Optionally show success message
           }}
         />
       </Box>

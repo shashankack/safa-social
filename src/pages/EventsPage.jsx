@@ -27,15 +27,26 @@ export default function EventsPage() {
   // Get all activities and filter based on tab
   const { activities: allItems, loading, error } = useActivities();
 
-  // Filter by status (upcoming, live, completed, canceled)
-  const upcomingItems = allItems.filter((item) => item.status === "upcoming");
-  const liveItems = allItems.filter((item) => item.status === "live");
-  const completedItems = allItems.filter((item) => item.status === "completed");
+  // Filter by dynamic status from the API, not the stored DB status
+  const upcomingItems = allItems.filter(
+    (item) => item.currentStatus === "upcoming"
+  );
+  const liveItems = allItems.filter((item) => item.currentStatus === "live");
+  const completedItems = allItems.filter(
+    (item) => item.currentStatus === "completed"
+  );
 
   const getCurrentItems = () => {
+    const statusRank = { live: 0, upcoming: 1, completed: 2, canceled: 3 };
+    const sortByStatus = (items) =>
+      [...items].sort(
+        (a, b) =>
+          (statusRank[a.currentStatus] ?? 9) - (statusRank[b.currentStatus] ?? 9)
+      );
+
     switch (tabValue) {
       case 0:
-        return allItems;
+        return sortByStatus(allItems);
       case 1:
         return upcomingItems;
       case 2:
@@ -43,7 +54,7 @@ export default function EventsPage() {
       case 3:
         return completedItems;
       default:
-        return allItems;
+        return sortByStatus(allItems);
     }
   };
 
@@ -203,7 +214,7 @@ export default function EventsPage() {
               sm={6}
               md={4}
               lg={3}
-              key={event.id}
+              key={event.slug || event.name}
             >
               <Card
                 component={RouterLink}

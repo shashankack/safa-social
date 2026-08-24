@@ -7,18 +7,21 @@ export function useActivities({ currentStatus, count } = {}) {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const statusKey = Array.isArray(currentStatus)
+    ? currentStatus.join(",")
+    : currentStatus || "";
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    const params = {};
-    if (count) params.limit = count;
+    const params = { limit: count || 100 };
+    const statuses = statusKey ? statusKey.split(",") : null;
     listActivities(params)
       .then((res) => {
         let fetchedActivities = res.activities || [];
-        if (currentStatus) {
-          fetchedActivities = fetchedActivities.filter(
-            (activity) => activity.currentStatus === currentStatus
+        if (statuses) {
+          fetchedActivities = fetchedActivities.filter((activity) =>
+            statuses.includes(activity.currentStatus)
           );
         }
         setActivities(fetchedActivities);
@@ -28,7 +31,7 @@ export function useActivities({ currentStatus, count } = {}) {
         setError(err.message);
         setLoading(false);
       });
-  }, [currentStatus, count]);
+  }, [statusKey, count]);
 
   return { activities, setActivities, loading, error };
 }
