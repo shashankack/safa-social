@@ -344,6 +344,22 @@ const UpcomingEventsSection = () => {
                   ? "Register"
                   : "Registration Closed"}
               </Button>
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "block",
+                  mt: 1.5,
+                  color: "#9a8f8f",
+                  fontSize: "0.72rem",
+                  lineHeight: 1.65,
+                  textAlign: "center",
+                  letterSpacing: 0.1,
+                }}
+              >
+                Fees are non-refundable once paid. Can't make it? Pass your
+                spot to a friend — message us their name, email and number at
+                least 2 days before the event.
+              </Typography>
             </CardContent>
           </Card>
         </Box>
